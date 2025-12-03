@@ -10,6 +10,7 @@ function App() {
   const [error, setError] = useState(null);
 
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [typeFilter, setTypeFilter] = useState("");
   const [types, setTypes] = useState([]);
   const [selectedPokemonId, setSelectedPokemonId] = useState(null);
@@ -21,6 +22,14 @@ function App() {
   const handleCloseModal = () => {
     setSelectedPokemonId(null);
   };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+
+    return () => clearTimeout(handler);
+  }, [search]);
 
 
   useEffect(() => {
@@ -47,7 +56,7 @@ function App() {
     };
 
     fetchPokemon();
-  }, [search, typeFilter]);
+  }, [debouncedSearch, typeFilter]);
 
   useEffect(() => {
     const fetchTypes = async () => {
