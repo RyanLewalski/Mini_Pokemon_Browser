@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "./components/PokemonCard";
+import PokemonDetailModal from "./components/PokemonDetailModal";
 import styles from "./styles/AppStyles";
 
 
@@ -10,6 +11,17 @@ function App() {
 
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
+  const [types, setTypes] = useState([]);
+  const [selectedPokemonId, setSelectedPokemonId] = useState(null);
+  
+   const handleCardClick = (id) => {
+    setSelectedPokemonId(id);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedPokemonId(null);
+  };
+
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -35,7 +47,21 @@ function App() {
     };
 
     fetchPokemon();
-  }, [search]);
+  }, [search, typeFilter]);
+
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/pokemon/types");
+        const data = await res.json();
+        setTypes(data.types);
+      } catch (err) {
+        console.error("Failed to load types:", err);
+      }
+    };
+
+    fetchTypes();
+  }, []);
 
   return (
     <div style={styles.container}>
@@ -56,25 +82,13 @@ function App() {
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
         >
-          <option value="">All Types</option>
-          <option value="fire">Fire</option>
-          <option value="water">Water</option>
-          <option value="grass">Grass</option>
-          <option value="electric">Electric</option>
-          <option value="ground">Ground</option>
-          <option value="flying">Flying</option>
-          <option value="poison">Poison</option>
-          <option value="bug">Bug</option>
-          <option value="psychic">Psychic</option>
-          <option value="normal">Normal</option>
-          <option value="fairy">Fairy</option>
-          <option value="fighting">Fighting</option>
-          <option value="rock">Rock</option>
-          <option value="ice">Ice</option>
-          <option value="dragon">Dragon</option>
-          <option value="ghost">Ghost</option>
-          <option value="steel">Steel</option>
-          <option value="dark">Dark</option>
+           <option value="">All Types</option>
+
+          {types.map((t) => (
+            <option key={t} value={t}>
+              {t.charAt(0).toUpperCase() + t.slice(1)}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -88,8 +102,16 @@ function App() {
       <div style={styles.grid}>
         {!loading &&
           !error &&
-          pokemon.map((p) => <PokemonCard key={p.id} data={p} />)}
+          pokemon.map((p) => <PokemonCard key={p.id} data={p} onClick={handleCardClick} />)}
       </div>
+
+      {/* Detail modal */}
+      {selectedPokemonId && (
+        <PokemonDetailModal
+          id={selectedPokemonId}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }

@@ -5,7 +5,8 @@ const PokemonCardStyles = {
     padding: "1rem",
     textAlign: "center",
     boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
-    transition: "transform 0.2s ease",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    cursor: "pointer",
   },
   image: {
     width: "120px",
@@ -33,4 +34,13 @@ const PokemonCardStyles = {
   },
 };
 
+PokemonCardStyles.card = {
+  ...PokemonCardStyles.card,
+  ":hover": {
+    transform: "translateY(-5px)",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+  },
+};
+
 export default PokemonCardStyles;
+

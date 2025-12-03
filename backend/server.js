@@ -96,10 +96,55 @@ app.get("/pokemon/list", async (req, res) => {
       count: filtered.length,
       results: filtered,
     });
-    
+
   } catch (err) {
     console.error("Error fetching Pokémon list:", err.message);
     res.status(500).json({ error: "Failed to fetch Pokémon list" });
+  }
+});
+
+app.get("/pokemon/types", async (req, res) => {
+  try {
+    const url = "https://pokeapi.co/api/v2/type";
+    const response = await axios.get(url);
+
+    const types = response.data.results
+      .map((t) => t.name)
+      .filter((name) => name !== "unknown" && name !== "shadow");
+
+    res.json({ types });
+  } catch (error) {
+    console.error("Error fetching types:", error);
+    res.status(500).json({ error: "Failed to load Pokémon types" });
+  }
+});
+
+app.get("/pokemon/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
+
+    const data = response.data;
+
+    const transformed = {
+      id: data.id,
+      name: data.name,
+      sprite: data.sprites.front_default,
+      types: data.types.map((t) => t.type.name),
+      height: data.height,
+      weight: data.weight,
+      abilities: data.abilities.map((a) => a.ability.name),
+      stats: data.stats.map((s) => ({
+        name: s.stat.name,
+        value: s.base_stat,
+      })),
+    };
+
+    res.json(transformed);
+  } catch (error) {
+    console.error("Error fetching Pokémon detail:", error);
+    res.status(500).json({ error: "Failed to load Pokémon detail" });
   }
 });
 
