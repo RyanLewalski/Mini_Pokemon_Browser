@@ -61,7 +61,7 @@ app.get("/pokemon", async (req, res) => {
 });
 
 app.get("/pokemon/list", async (req, res) => {
-  const { search } = req.query;
+  const { search, type } = req.query;
 
   try {
     const { data } = await axios.get(
@@ -82,15 +82,21 @@ app.get("/pokemon/list", async (req, res) => {
     );
 
     let filtered = detailedData;
+
     if (search) {
       const q = search.toLowerCase();
       filtered = filtered.filter((p) => p.name.includes(q));
+    }
+
+    if (type) {
+      filtered = filtered.filter((p) => p.types.includes(type.toLowerCase()));
     }
 
     res.json({
       count: filtered.length,
       results: filtered,
     });
+    
   } catch (err) {
     console.error("Error fetching Pokémon list:", err.message);
     res.status(500).json({ error: "Failed to fetch Pokémon list" });
