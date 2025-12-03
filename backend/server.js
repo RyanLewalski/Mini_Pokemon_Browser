@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Pokémon Mini Browser API is running!" });
 });
 
-// Pokémon endpoint skeleton
+
 app.get("/pokemon", async (req, res) => {
   const { name } = req.query;
 
@@ -57,6 +57,43 @@ app.get("/pokemon", async (req, res) => {
     }
 
     res.status(500).json({ error: "Server error fetching Pokémon data" });
+  }
+});
+
+app.get("/pokemon/list", async (req, res) => {
+  const { search } = req.query;
+
+  try {
+    const { data } = await axios.get(
+      "https://pokeapi.co/api/v2/pokemon?limit=151"
+    );
+
+    const detailedData = await Promise.all(
+      data.results.map(async (pokemon) => {
+        const { data: details } = await axios.get(pokemon.url);
+
+        return {
+          id: details.id,
+          name: details.name,
+          sprite: details.sprites.other["official-artwork"].front_default,
+          types: details.types.map((t) => t.type.name),
+        };
+      })
+    );
+
+    let filtered = detailedData;
+    if (search) {
+      const q = search.toLowerCase();
+      filtered = filtered.filter((p) => p.name.includes(q));
+    }
+
+    res.json({
+      count: filtered.length,
+      results: filtered,
+    });
+  } catch (err) {
+    console.error("Error fetching Pokémon list:", err.message);
+    res.status(500).json({ error: "Failed to fetch Pokémon list" });
   }
 });
 
