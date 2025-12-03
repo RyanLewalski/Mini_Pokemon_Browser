@@ -74,7 +74,7 @@ function App() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Pokémon Mini Browser</h1>
+      <h1 style={styles.title}>Pokémon Browser</h1>
 
       <div style={styles.controls}>
         {/* Controls Row */}

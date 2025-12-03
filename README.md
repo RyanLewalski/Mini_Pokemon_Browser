@@ -105,4 +105,11 @@ backend/
 
 ---
 
+## Final Notes
 
+This Project took me about 2 hours and 20 minutes, and I am happy where I was able to leave it off. Like stated above, some of the possible improvements that I wanted to do would either make me rush, or I don't think I would have the time needed to do them properly. For this project, I used node.js + express because it is a very familiar runtime and framework for me, and the same goes for react + vite. I also used many different resources to complete this, some being AI, and others being wiki pages to help me with the proper color scheme for the types. For this project, AI helped me with designing how the grid could look, as well as with some of the coding to make sure this was done on time.
+
+I just wanted to thank you again for the opportunity for this interview. I really enjoyed building this mini project, and it was a great chance to demonstrate my skills. Thank you again for your time and consideration!
+
+Best regards,
+Ryan Lewalski
