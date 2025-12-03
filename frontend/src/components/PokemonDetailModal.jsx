@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/PokemonDetailStyles";
+import typeColors from "../styles/typeColors";
 
 function PokemonDetailModal({ id, onClose }) {
   const [pokemon, setPokemon] = useState(null);
@@ -35,27 +36,51 @@ function PokemonDetailModal({ id, onClose }) {
           <>
             <h2 style={styles.title}>{pokemon.name}</h2>
             <img src={pokemon.sprite} alt={pokemon.name} style={styles.image} />
-            <p><strong>Types:</strong> {pokemon.types.join(", ")}</p>
-            <p><strong>Height:</strong> {pokemon.height}</p>
-            <p><strong>Weight:</strong> {pokemon.weight}</p>
-            <p><strong>Abilities:</strong> {pokemon.abilities.join(", ")}</p>
-            <div>
-              <strong>Stats:</strong>
-              <ul>
+
+            <div style={styles.typesContainer}>
+              {pokemon.types.map((t) => (
+                <span
+                  key={t}
+                  style={{
+                    ...styles.typeBadge,
+                    background: typeColors[t] || "#e6e6e6",
+                  }}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            <p style={styles.description}>{pokemon.description}</p>
+
+            <div style={styles.section}>
+              <p style={styles.label}>Height: {pokemon.height}</p>
+              <p style={styles.label}>Weight: {pokemon.weight}</p>
+              <p style={styles.label}>
+                Abilities: {pokemon.abilities.join(", ")}
+              </p>
+            </div>
+
+            <div style={styles.section}>
+              <p style={styles.label}>Stats:</p>
+              <ul style={styles.statsList}>
                 {pokemon.stats.map((s) => (
-                  <li key={s.name}>
-                    {s.name}: {s.value}
+                  <li key={s.name} style={styles.statItem}>
+                    <span>{s.name}</span>
+                    <span>{s.value}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <button onClick={onClose} style={styles.closeButton}>Close</button>
+
+            <button style={styles.closeButton} onClick={onClose}>
+              Close
+            </button>
           </>
         )}
       </div>
     </div>
   );
 }
-
 
 export default PokemonDetailModal;

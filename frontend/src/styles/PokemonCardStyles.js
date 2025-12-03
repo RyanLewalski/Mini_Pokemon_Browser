@@ -31,14 +31,7 @@ const PokemonCardStyles = {
     padding: "0.25rem 0.5rem",
     fontSize: "0.8rem",
     textTransform: "capitalize",
-  },
-};
-
-PokemonCardStyles.card = {
-  ...PokemonCardStyles.card,
-  ":hover": {
-    transform: "translateY(-5px)",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+    transition: "transform 0.2s ease",
   },
 };
 
